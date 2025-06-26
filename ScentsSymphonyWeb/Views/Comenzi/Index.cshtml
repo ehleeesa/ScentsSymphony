@@ -1,0 +1,34 @@
+﻿@model IEnumerable<ScentsSymphonyWeb.Models.Order>
+@using ScentsSymphonyWeb.Helpers
+
+<h2 class="my-4 py-2">Orders</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info mt-4">
+        🛍️ Nu ai plasat încă nicio comandă.<br />
+        Explorează magazinul și descoperă parfumul perfect pentru tine!
+        <br />
+        <a class="btn btn-primary mt-2" asp-controller="Shop" asp-action="Index">
+            Vezi parfumurile
+        </a>
+    </div>
+}
+else
+{
+    @foreach (var order in Model)
+    {
+        <div class="order-summary mb-4 p-3 border rounded shadow-sm bg-light">
+            <p><strong>Order ID:</strong> @order.OrderID</p>
+            <p><strong>Total Amount:</strong> @order.TotalAmount.ToRon()</p>
+            <p><strong>Order Date:</strong> @order.OrderDate</p>
+            <ul>
+                @foreach (var item in order.OrderItems)
+                {
+                    <li>@item.Product.Name - Quantity: @item.Quantity - Price: @item.Price.ToRon()</li>
+                }
+            </ul>
+            <a class="btn btn-outline-primary btn-sm" href="@Url.Action("Details", new { id = order.OrderID })">View Details</a>
+        </div>
+    }
+}

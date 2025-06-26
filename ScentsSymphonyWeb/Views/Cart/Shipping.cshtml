@@ -1,0 +1,106 @@
+﻿@model ScentsSymphonyWeb.Models.ShippingInfo
+
+@{
+    ViewData["Title"] = "Shipping Information";
+}
+
+<h2 class="mt-4">Shipping Details</h2>
+
+<form asp-action="Shipping" method="post" class="mt-3">
+    <div class="mb-3">
+        <label class="form-label">Nume și prenume</label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Adresă de livrare</label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Metodă de livrare</label>
+        <select asp-for="DeliveryMethod" class="form-select">
+            <option value="">Selectează metoda</option>
+            <option>Ridicare din magazin</option>
+            <option>Sameday - Domiciliu</option>
+            <option>Sameday - Easybox</option>
+        </select>
+        <span asp-validation-for="DeliveryMethod" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Județ</label>
+        <select asp-for="County" class="form-select">
+            <option value="">Selectează județul</option>
+            <option>Alba</option>
+            <option>Arad</option>
+            <option>Argeș</option>
+            <option>Bacău</option>
+            <option>Bihor</option>
+            <option>Bistrița-Năsăud</option>
+            <option>Botoșani</option>
+            <option>Brăila</option>
+            <option>Brașov</option>
+            <option>București</option>
+            <option>Buzău</option>
+            <option>Călărași</option>
+            <option>Caraș-Severin</option>
+            <option>Cluj</option>
+            <option>Constanța</option>
+            <option>Covasna</option>
+            <option>Dâmbovița</option>
+            <option>Dolj</option>
+            <option>Galați</option>
+            <option>Giurgiu</option>
+            <option>Gorj</option>
+            <option>Harghita</option>
+            <option>Hunedoara</option>
+            <option>Ialomița</option>
+            <option>Iași</option>
+            <option>Ilfov</option>
+            <option>Maramureș</option>
+            <option>Mehedinți</option>
+            <option>Mureș</option>
+            <option>Neamț</option>
+            <option>Olt</option>
+            <option>Prahova</option>
+            <option>Satu Mare</option>
+            <option>Sălaj</option>
+            <option>Sibiu</option>
+            <option>Suceava</option>
+            <option>Teleorman</option>
+            <option>Timiș</option>
+            <option>Tulcea</option>
+            <option>Vâlcea</option>
+            <option>Vaslui</option>
+            <option>Vrancea</option>
+        </select>
+        <span asp-validation-for="County" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Oraș</label>
+        <input asp-for="City" class="form-control" />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Cod poștal</label>
+        <input asp-for="PostalCode" class="form-control" />
+        <span asp-validation-for="PostalCode" class="text-danger"></span>
+    </div>
+
+    <div class="mb-4">
+        <label class="form-label">Număr de telefon</label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success px-4">Continue to Payment</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

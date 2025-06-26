@@ -1,0 +1,45 @@
+﻿@model List<ScentsSymphonyWeb.Models.WishlistItem>
+@using ScentsSymphonyWeb.Helpers
+
+
+@{
+    ViewData["Title"] = "Wishlist";
+}
+
+<h2 class="mt-4 mb-3">Produsele tale favorite</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Nu ai produse în wishlist.</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Product.Name</h5>
+                        <p class="card-text">@item.Product.Description</p>
+
+                        @{
+                            var price = item.Product.Price50ml.HasValue
+                            ? item.Product.Price50ml.Value
+                            : item.Product.Price100ml ?? 0;
+                        }
+
+                        <p><strong>@price.ToRon()</strong></p>
+
+                        <form asp-action="Remove" method="post">
+                            <input type="hidden" name="wishlistItemId" value="@item.WishlistItemID" />
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="bi bi-x-circle"></i> Șterge din wishlist
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

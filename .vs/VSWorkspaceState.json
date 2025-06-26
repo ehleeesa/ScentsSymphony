@@ -1,0 +1,17 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\ScentsSymphonyWeb",
+    "\\ScentsSymphonyWeb\\Areas",
+    "\\ScentsSymphonyWeb\\Areas\\Identity",
+    "\\ScentsSymphonyWeb\\Areas\\Identity\\Pages",
+    "\\ScentsSymphonyWeb\\Areas\\Identity\\Pages\\Account",
+    "\\ScentsSymphonyWeb\\Controllers",
+    "\\ScentsSymphonyWeb\\Views",
+    "\\ScentsSymphonyWeb\\Views\\Comenzi",
+    "\\ScentsSymphonyWeb\\Views\\Home",
+    "\\ScentsSymphonyWeb\\Views\\Stripe"
+  ],
+  "SelectedNode": "\\ScentsSymphony.sln",
+  "PreviewInSolutionExplorer": false
+}

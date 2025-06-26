@@ -1,0 +1,111 @@
+﻿@model ScentsSymphonyWeb.Models.Parfumuri
+
+@{
+    ViewData["Title"] = "Edit Perfume";
+}
+<hr />
+<h2>Edit Perfume</h2>
+<hr />
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="ProductID" />
+
+    <div class="form-group">
+        <label asp-for="Brand" class="control-label">Brand</label>
+        <input asp-for="Brand" class="form-control" />
+        <span asp-validation-for="Brand" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Nisa" class="control-label">Nișă</label>
+        <select asp-for="Nisa" class="form-control">
+            <option value="">-- Selectează --</option>
+            <option value="Românească">Românească</option>
+            <option value="Internațională">Internațională</option>
+        </select>
+        <span asp-validation-for="Nisa" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CantitateDisponibila" class="control-label">Cantitate disponibilă</label>
+        <select asp-for="CantitateDisponibila" class="form-control" id="cantitateDropdown">
+            <option value="">-- Selectează --</option>
+            <option value="50ml">Doar 50ml</option>
+            <option value="50 și 100ml">50ml și 100ml</option>
+        </select>
+        <span asp-validation-for="CantitateDisponibila" class="text-danger"></span>
+    </div>
+
+    <div id="price50ml-group" class="form-group">
+        <label asp-for="Price50ml" class="control-label">Preț 50ml (RON)</label>
+        <input asp-for="Price50ml" class="form-control" />
+        <span asp-validation-for="Price50ml" class="text-danger"></span>
+    </div>
+
+    <div id="price100ml-group" class="form-group" style="display:none;">
+        <label asp-for="Price100ml" class="control-label">Preț 100ml (RON)</label>
+        <input asp-for="Price100ml" class="form-control" />
+        <span asp-validation-for="Price100ml" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Name" class="control-label">Nume</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description" class="control-label">Descriere</label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PerfumeNotes" class="control-label">Notele parfumului</label>
+        <input asp-for="PerfumeNotes" class="form-control" />
+        <span asp-validation-for="PerfumeNotes" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Stock" class="control-label">Stoc</label>
+        <input asp-for="Stock" class="form-control" />
+        <span asp-validation-for="Stock" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ImageURL" class="control-label">URL Imagine</label>
+        <input asp-for="ImageURL" class="form-control" />
+        <span asp-validation-for="ImageURL" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-success">Save</button>
+        <a asp-action="Index" class="btn btn-secondary ml-2">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const dropdown = document.getElementById("cantitateDropdown");
+        const price50 = document.getElementById("price50ml-group");
+        const price100 = document.getElementById("price100ml-group");
+
+        function togglePriceFields() {
+            const val = dropdown.value;
+            if (val === "50 și 100ml") {
+                price50.style.display = "block";
+                price100.style.display = "block";
+            } else if (val === "50ml") {
+                price50.style.display = "block";
+                price100.style.display = "none";
+            } else {
+                price50.style.display = "none";
+                price100.style.display = "none";
+            }
+        }
+
+        dropdown.addEventListener("change", togglePriceFields);
+        document.addEventListener("DOMContentLoaded", togglePriceFields);
+    </script>
+}

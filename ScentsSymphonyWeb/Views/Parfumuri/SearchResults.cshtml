@@ -1,0 +1,44 @@
+﻿@model IEnumerable<ScentsSymphonyWeb.Models.Parfumuri>
+@using ScentsSymphonyWeb.Helpers
+
+@{
+    ViewData["Title"] = "Rezultatele căutării";
+}
+
+<h2>Rezultatele căutării</h2>
+
+<div class="row">
+    @foreach (var parfum in Model)
+    {
+        decimal pretMinim = 0m;
+
+        if (parfum.Price50ml.HasValue && parfum.Price100ml.HasValue)
+        {
+            pretMinim = parfum.Price50ml.Value < parfum.Price100ml.Value ? parfum.Price50ml.Value : parfum.Price100ml.Value;
+        }
+        else if (parfum.Price50ml.HasValue)
+        {
+            pretMinim = parfum.Price50ml.Value;
+        }
+        else if (parfum.Price100ml.HasValue)
+        {
+            pretMinim = parfum.Price100ml.Value;
+        }
+
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <img class="card-img-top" src="@parfum.ImageURL" alt="@parfum.Name" />
+                <div class="card-body">
+                    <h5 class="card-title">@parfum.Name</h5>
+                    <p class="card-text">@parfum.Description</p>
+                    <p class="card-text">@pretMinim.ToRon()</p>
+                    <a asp-controller="Parfumuri" asp-action="Details" asp-route-id="@parfum.ProductID" class="btn btn-primary">Details</a>
+                    <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                        <input type="hidden" name="productId" value="@parfum.ProductID" />
+                        @*<button type="submit" class="btn btn-success">Add to Cart</button>*@
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>

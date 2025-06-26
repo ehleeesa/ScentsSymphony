@@ -1,0 +1,106 @@
+﻿@model Parfumuri
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2>Add a perfume</h2>
+            <hr />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Brand">Brand</label>
+            <input asp-for="Brand" class="form-control" />
+            <span asp-validation-for="Brand" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Nisa">Nișă</label>
+            <select asp-for="Nisa" class="form-control">
+                <option value="">-- Selectează --</option>
+                <option value="Românească">Românească</option>
+                <option value="Internațională">Internațională</option>
+            </select>
+            <span asp-validation-for="Nisa" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CantitateDisponibila">Cantitate disponibilă</label>
+            <select asp-for="CantitateDisponibila" class="form-control" id="cantitateDisponibilaSelect">
+                <option value="">-- Selectează --</option>
+                <option value="50ml">Doar 50ml</option>
+                <option value="50 și 100ml">50ml și 100ml</option>
+            </select>
+            <span asp-validation-for="CantitateDisponibila" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Name">Nume</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description">Descriere</label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <!-- Preț 50ml - afișat mereu, dar va fi ascuns/afișat cu JS -->
+        <div class="mb-3" id="price50mlDiv">
+            <label asp-for="Price50ml">Preț 50ml (RON)</label>
+            <input asp-for="Price50ml" class="form-control" />
+            <span asp-validation-for="Price50ml" class="text-danger"></span>
+        </div>
+
+        <!-- Preț 100ml - afișat doar dacă "50 și 100ml" este selectat -->
+        <div class="mb-3" id="price100mlDiv" style="display:none;">
+            <label asp-for="Price100ml">Preț 100ml (RON)</label>
+            <input asp-for="Price100ml" class="form-control" />
+            <span asp-validation-for="Price100ml" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="PerfumeNotes">Notele parfumului</label>
+            <input asp-for="PerfumeNotes" class="form-control" />
+            <span asp-validation-for="PerfumeNotes" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Stock">Stoc</label>
+            <input asp-for="Stock" class="form-control" />
+            <span asp-validation-for="Stock" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ImageURL">URL Imagine</label>
+            <input asp-for="ImageURL" class="form-control" />
+            <span asp-validation-for="ImageURL" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:150px">Add</button>
+        <a asp-controller="Parfumuri" asp-action="Index" class="btn btn-secondary" style="width:150px">
+            Back to list
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Funcție pentru afișarea/ascunderea câmpului Price100ml în funcție de CantitateDisponibila selectată
+        function togglePriceFields() {
+            var cantitate = document.getElementById('cantitateDisponibilaSelect').value;
+            if (cantitate === '50 și 100ml') {
+                document.getElementById('price100mlDiv').style.display = 'block';
+            } else {
+                document.getElementById('price100mlDiv').style.display = 'none';
+            }
+        }
+
+        // La încărcare și la schimbare a selecției, aplică logica
+        document.addEventListener('DOMContentLoaded', function () {
+            togglePriceFields();
+            document.getElementById('cantitateDisponibilaSelect').addEventListener('change', togglePriceFields);
+        });
+    </script>
+}

@@ -1,0 +1,44 @@
+﻿@model List<ScentsSymphonyWeb.Models.CartItem>
+@using ScentsSymphonyWeb.Helpers
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h2>Checkout</h2>
+
+<p>Review your order and confirm your payment.</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Size</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            decimal unitPrice = item.SelectedQuantity == "100ml"
+            ? (item.Product.Price100ml.HasValue ? Convert.ToDecimal(item.Product.Price100ml.Value) : 0)
+            : (item.Product.Price50ml.HasValue ? Convert.ToDecimal(item.Product.Price50ml.Value) : 0);
+
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.SelectedQuantity</td>
+                <td>@unitPrice.ToRon()</td>
+                <td>@((unitPrice * item.Quantity).ToRon())</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <form asp-action="ConfirmCheckout" method="post">
+        <button type="submit" class="btn btn-primary">Confirm Payment</button>
+    </form>
+</div>

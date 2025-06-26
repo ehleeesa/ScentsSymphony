@@ -1,0 +1,111 @@
+﻿@model ScentsSymphonyWeb.Models.Parfumuri
+@using ScentsSymphonyWeb.Helpers
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
+@{
+    ViewData["Title"] = "Details";
+
+    decimal pretAfisat;
+
+    if (Model.CantitateDisponibila == "50 și 100ml")
+    {
+        pretAfisat = Model.Price50ml ?? 0m;
+    }
+    else if (Model.CantitateDisponibila == "50ml")
+    {
+        pretAfisat = Model.Price50ml ?? 0m;
+    }
+    else
+    {
+        pretAfisat = 0m;
+    }
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5 position-relative text-center">
+            <div class="position-absolute top-0 start-0 bg-dark text-white px-3 py-2 rounded-bottom-end">
+                <h5 class="mb-0"><strong>@Model.Brand</strong> @Model.Name</h5>
+            </div>
+            <img class="img-fluid rounded shadow-sm mt-4" src="@Model.ImageURL" alt="@Model.Name" style="max-height: 500px;" />
+        </div>
+        <div class="col-md-6">
+            <h4 class="mt-4">Descriere</h4>
+            <p>@Model.Description</p>
+
+            <h4 class="mt-4">Nișă</h4>
+            <p>@Model.Nisa</p>
+
+            @if (Model.CantitateDisponibila == "50 și 100ml")
+            {
+                <h5 class="mt-3">Selectează cantitatea</h5>
+                <div class="d-flex gap-3 mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="cantitate" id="radio50" value="50ml" checked />
+                        <label class="form-check-label" for="radio50">50ml (@(Model.Price50ml?.ToRon() ?? "N/A"))</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="cantitate" id="radio100" value="100ml" />
+                        <label class="form-check-label" for="radio100">100ml (@(Model.Price100ml?.ToRon() ?? "N/A"))</label>
+                    </div>
+                </div>
+            }
+            else if (Model.CantitateDisponibila == "50ml")
+            {
+                <h5 class="mt-3">Cantitate disponibilă</h5>
+                <p>50ml (@(Model.Price50ml?.ToRon() ?? "N/A"))</p>
+            }
+
+            <h4 class="mt-4">Preț</h4>
+            <p id="pretAfisat">@pretAfisat.ToRon()</p>
+
+            <h4 class="mt-4">Notele parfumului</h4>
+            <p>@Model.PerfumeNotes</p>
+
+            <h4 class="mt-4">Stoc</h4>
+            <p>@Model.Stock</p>
+
+            <div class="d-flex gap-3 mt-4">
+                <form asp-controller="Cart" asp-action="AddToCart" method="post" id="addToCartForm">
+                    <input type="hidden" name="productId" value="@Model.ProductID" />
+                    <input type="hidden" name="cantitateSelectata" id="cantitateInput" value="50ml" />
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="bi bi-cart"></i> Add to Cart
+                    </button>
+                </form>
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <form asp-controller="Wishlist" asp-action="Add" method="post">
+                        <input type="hidden" name="productId" value="@Model.ProductID" />
+                        <button type="submit" class="btn btn-success px-4">
+                            <i class="bi bi-heart"></i> Add to wishlist
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const price50 = @Model.Price50ml ?? 0;
+        const price100 = @Model.Price100ml ?? 0;
+
+        document.querySelectorAll('input[name="cantitate"]').forEach(el => {
+            el.addEventListener('change', function () {
+                const cantitate = this.value;
+                document.getElementById('cantitateInput').value = cantitate;
+
+                let pretAfisatElem = document.getElementById('pretAfisat');
+                if (cantitate === "50ml") {
+                    pretAfisatElem.textContent = new Intl.NumberFormat('ro-RO', { style: 'currency', currency: 'RON' }).format(price50);
+                } else if (cantitate === "100ml") {
+                    pretAfisatElem.textContent = new Intl.NumberFormat('ro-RO', { style: 'currency', currency: 'RON' }).format(price100);
+                }
+            });
+        });
+    </script>
+}

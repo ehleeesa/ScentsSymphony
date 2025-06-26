@@ -1,0 +1,19 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Confirmare înregistrare";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h2 class="mb-4">Mulțumim pentru înregistrare!</h2>
+            <p class="lead">Ți-am trimis un email de confirmare la adresa <strong>@Model.Email</strong>.</p>
+            <p>Te rugăm să verifici inbox-ul (sau folderul Spam) și să confirmi adresa de email pentru a-ți activa contul.</p>
+
+            <a class="btn btn-primary mt-4" asp-area="" asp-controller="Home" asp-action="Index">
+                &larr; Înapoi la pagina principală
+            </a>
+        </div>
+    </div>
+</div>

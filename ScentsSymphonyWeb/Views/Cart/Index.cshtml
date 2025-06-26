@@ -1,0 +1,47 @@
+﻿@model List<ScentsSymphonyWeb.Models.CartItem>
+@using ScentsSymphonyWeb.Helpers
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<h2 class="my-4 py-2">Shopping Cart</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Size</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var unitPrice = item.SelectedQuantity == "100ml"
+            ? (decimal)(item.Product.Price100ml ?? 0)
+            : (decimal)item.Product.Price50ml;
+
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.SelectedQuantity</td>
+                <td>@unitPrice.ToRon()</td>
+                <td>@((unitPrice * item.Quantity).ToRon())</td>
+                <td>
+                    <form asp-controller="Cart" asp-action="RemoveFromCart" method="post" style="display:inline;">
+                        <input type="hidden" name="productId" value="@item.Product.ProductID" />
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="mt-4">
+    <a asp-controller="Cart" asp-action="Checkout" class="btn btn-primary">Checkout</a>
+</div>

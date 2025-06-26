@@ -1,0 +1,275 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ScentsSymphonyWeb</title>
+    <link rel="stylesheet" href="~/css/BootswatchTheme.css" />
+    <link rel="stylesheet" href="~/ScentsSymphonyWeb.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <style>
+        #searchForm {
+            transition: max-width 0.4s ease;
+            overflow: hidden;
+            max-width: 0;
+        }
+
+            #searchForm.show {
+                max-width: 200px;
+            }
+
+        /* Chatbot styling */
+        #chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            z-index: 9999;
+        }
+
+        #chat-header {
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            cursor: pointer;
+        }
+
+        #chat-body {
+            display: none;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        #chat-messages p {
+            margin: 5px 0;
+        }
+
+        .chat-btn {
+            display: inline-block;
+            margin: 5px 2px;
+            padding: 6px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        footer {
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Scents Symphony</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarColor02">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="AboutUs">About us</a>
+                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Parfumuri" asp-action="Index">Perfumes</a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Shop" asp-action="Index">Shop</a>
+                        </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Orders" asp-action="Index">Order History</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="searchToggle" title="Caută">
+                                    <i class="bi bi-search"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Wishlist" asp-action="Index" title="Wishlist">
+                                    <i class="bi bi-heart"></i>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                    <form class="d-flex me-2" id="searchForm" asp-controller="Parfumuri" asp-action="Search" method="get">
+                        <input class="form-control" type="search" name="searchTerm" placeholder="Search perfume" aria-label="Search" />
+                    </form>
+
+                    <a class="nav-link text-light ms-3" asp-controller="Cart" asp-action="Index">
+                        <i class="bi bi-cart"></i> Cart
+                    </a>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- CONDITIONAL FOOTER -->
+    @if (!(Context.Request.Path.Value?.ToLower() == "/" || Context.Request.Path.Value?.ToLower() == "/home/index"))
+    {
+        <footer class="text-center text-muted mt-5 mb-3">
+            <hr />
+            <p>&copy; 2025 Scents Symphony. Toate drepturile rezervate.</p>
+        </footer>
+    }
+
+    <!-- Chatbot -->
+    <div id="chat-widget">
+        <div id="chat-header" onclick="toggleChat()">💬 Asistent parfumuri</div>
+        <div id="chat-body">
+            <div id="chat-messages"></div>
+            <div id="chat-options"></div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchToggle = document.getElementById('searchToggle');
+            const searchForm = document.getElementById('searchForm');
+
+            searchToggle?.addEventListener('click', function (e) {
+                e.preventDefault();
+                searchForm.classList.toggle('show');
+            });
+        });
+
+        let step = 0;
+        let lastAnswers = [];
+
+        function toggleChat() {
+            const body = document.getElementById("chat-body");
+            body.style.display = body.style.display === "block" ? "none" : "block";
+            if (step === 0) {
+                lastAnswers = [];
+                showStep0();
+            }
+        }
+
+        function sendMessage(text) {
+            const messages = document.getElementById("chat-messages");
+            messages.innerHTML += `<p><strong>🐱 Tu:</strong> ${text}</p>`;
+        }
+
+        function botMessage(text) {
+            const messages = document.getElementById("chat-messages");
+            messages.innerHTML += `<p><strong>💁 Asistent:</strong> ${text}</p>`;
+        }
+
+        function showOptions(options, callback) {
+            const container = document.getElementById("chat-options");
+            container.innerHTML = "";
+            options.forEach(option => {
+                const btn = document.createElement("button");
+                btn.className = "chat-btn";
+                btn.innerText = option;
+                btn.onclick = () => {
+                    lastAnswers.push(option);
+                    sendMessage(option);
+                    callback(option);
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function showStep0() {
+            botMessage("Pentru cine cauți parfumul?");
+            showOptions(["Pentru mine", "Pentru un cadou"], () => {
+                step = 1;
+                showStep1();
+            });
+        }
+
+        function showStep1() {
+            botMessage("Ce tip de arome preferi?");
+            showOptions(["Florale", "Citrice", "Lemnoase", "Dulci", "Speciale"], () => {
+                step = 2;
+                showStep2();
+            });
+        }
+
+        function showStep2() {
+            botMessage("Vrei pentru zi sau seară?");
+            showOptions(["Zi", "Seară"], () => {
+                step = 3;
+                showFinal();
+            });
+        }
+
+        function showFinal() {
+            let sugestii = [];
+
+            if (lastAnswers.includes("Florale")) {
+                sugestii.push("Killian Good Girl Gone Bad", "Tiziana Terenzi Orza");
+            }
+            if (lastAnswers.includes("Citrice")) {
+                sugestii.push("Mancera Cedrat Boise", "Casamorati Mefisto Gentiluomo");
+            }
+            if (lastAnswers.includes("Lemnoase")) {
+                sugestii.push("Nishane Ani", "Xerjoff Alexandria II");
+            }
+            if (lastAnswers.includes("Dulci")) {
+                sugestii.push("Casamorati Lira", "Francesca Bianchi Under My Skin");
+            }
+            if (lastAnswers.includes("Speciale")) {
+                sugestii.push("C5DE Basm", "Calaj Transilvania");
+            }
+
+            if (lastAnswers.includes("Seară")) {
+                sugestii.push("Initio Oud for Greatness", "Francesca Bianchi Angel’s Dust");
+            } else if (lastAnswers.includes("Zi")) {
+                sugestii.push("Etat Libre d’Orange You or Someone Like You", "Casamorati La Tosca");
+            }
+
+            botMessage("✨ Recomandările mele pentru tine sunt:");
+            const messages = document.getElementById("chat-messages");
+            sugestii.forEach(s => {
+                messages.innerHTML += `<p>• ${s}</p>`;
+            });
+
+            messages.innerHTML += `<p><em>Te invit să arunci o privire în <a href="/Shop">shop-ul nostru</a>!</em></p>`;
+
+            document.getElementById("chat-options").innerHTML = "";
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

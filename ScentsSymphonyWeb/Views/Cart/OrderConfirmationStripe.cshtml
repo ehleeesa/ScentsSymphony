@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Plată finalizată";
+}
+
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="text-center">
+        <h2 class="mb-4">Plată reușită!</h2>
+
+        <p class="lead">Îți mulțumim pentru comandă! Plata ta a fost procesată cu succes prin Stripe.</p>
+        <p class="mb-4">Comanda ta a fost înregistrată și este în curs de procesare.</p>
+
+        <a href="@Url.Action("Index", "Shop")" class="btn btn-primary px-4">Înapoi la magazin</a>
+    </div>
+</div>
