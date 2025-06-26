@@ -39,7 +39,6 @@ cd repo
    - Dacă *nu*, creează baza de date manual sau rulează scripturi .sql din proiect (dacă există)
 5. Verifică string-ul de conexiune din fișierul appsettings.json:
 
-xml
 <connectionStrings>
   <add name="DefaultConnection"
        connectionString="Data Source=.;Initial Catalog=ScentsSymphony;Integrated Security=True"
