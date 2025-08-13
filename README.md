@@ -2,6 +2,9 @@
 
 Acesta este un proiect ASP.NET Core MVC care se conectează la o bază de date locală SQL Server și rulează prin IIS Express în Visual Studio 2022.
 
+<img width="674" height="396" alt="Picture1" src="https://github.com/user-attachments/assets/89ef02d2-ecaf-48f2-82d8-5a7a9b2a88e2" />
+
+
 ## Repository GitHub
 
 [https://https://github.com/ehleeesa/ScentsSymphony/]
