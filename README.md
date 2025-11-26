@@ -5,12 +5,6 @@ This is an ASP.NET Core MVC project connected to a local SQL Server database and
 <p align="center"> <img width="674" height="396" src="https://github.com/user-attachments/assets/89ef02d2-ecaf-48f2-82d8-5a7a9b2a88e2" alt="Scents Symphony Screenshot"> </p>
 
 
-## Repository GitHub
-
-[https://https://github.com/ehleeesa/ScentsSymphony/]
-
----
-
 ## Installation steps:
 
 ### 1. Clone the repository:
