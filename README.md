@@ -1,8 +1,8 @@
 # Scents Symphony
 
-Acesta este un proiect ASP.NET Core MVC care se conectează la o bază de date locală SQL Server și rulează prin IIS Express în Visual Studio 2022.
+This is an ASP.NET Core MVC project connected to a local SQL Server database and running through IIS Express in Visual Studio 2022.
 
-<img width="674" height="396" alt="Picture1" src="https://github.com/user-attachments/assets/89ef02d2-ecaf-48f2-82d8-5a7a9b2a88e2" />
+<p align="center"> <img width="674" height="396" src="https://github.com/user-attachments/assets/89ef02d2-ecaf-48f2-82d8-5a7a9b2a88e2" alt="Scents Symphony Screenshot"> </p>
 
 
 ## Repository GitHub
@@ -11,36 +11,38 @@ Acesta este un proiect ASP.NET Core MVC care se conectează la o bază de date l
 
 ---
 
-## Pași de instalare
+## Installation steps:
 
-### 1. Clonează repository-ul
+### 1. Clone the repository:
 
 bash
 git clone https://https://github.com/ehleeesa/ScentsSymphony/
 cd repo
 
+## Requirements
 
-### 2. Asigură-te că ai următoarele instalate:
+### 2. Make sure you have the following installed:
 
-- *Visual Studio 2022* cu workload-ul „ASP.NET and web development”
+
+- *Visual Studio 2022 with the ASP.NET and Web Development workload*
 - *SQL Server Management Studio 19 (SSMS)*
-- *SQL Server LocalDB sau Express Edition*
-- *.NET Framework* (.NET Framework 6.0)
+- *SQL Server LocalDB* or *SQL Server Express*
+- *.NET 6.0 SDK (for ASP.NET Core MVC)*
 
 ---
 
-## Configurarea bazei de date
+## Database configuration: 
 
-1. Deschide *SQL Server Management Studio 19*
-2. Conectează-te astfel:
+1. Open *SQL Server Management Studio (SSMS)*
+2. Connect using:
    - *Server type*: Database Engine  
    - *Server name*: . (localhost)
    - *Authentication*: Windows Authentication
-3. Apasă *Connect*
-4. Verifică dacă baza de date folosită de aplicație există deja:
-   - Dacă *da*, poți trece mai departe
-   - Dacă *nu*, creează baza de date manual sau rulează scripturi .sql din proiect (dacă există)
-5. Verifică string-ul de conexiune din fișierul appsettings.json:
+3. Click *Connect*
+4. Check whether the required database exists::
+   - If *yes*, continue
+   - If *no*, create it manually or run the SQL scripts included in the project (if any)
+5. Verify the connection string in appsettings.json:
 
 <connectionStrings>
   <add name="DefaultConnection"
@@ -51,21 +53,21 @@ cd repo
 
 ---
 
-## Pași de compilare
+## Build instructions: 
 
-1. Deschide proiectul în *Visual Studio 2022* (fișier .sln)
-2. Selectează configurația Debug și platforma Any CPU
-3. Mergi la:
+1. Open the solution file (.sln) in *Visual Studio 2022*
+2. Select *Configuration:* Debug and *Platform:* Any CPU
+3. Go to:
    - *Build* → *Build Solution*
-   - Sau apasă Ctrl + Shift + B
+   - Or press Ctrl + Shift + B
 
 ---
 
-## Pași de rulare
+## Run instructions: 
 
-1. În Visual Studio, selectează *IIS Express* ca profil de rulare
-2. Apasă pe *Start* (F5)
-3. Se va deschide browserul pe:
+1. In Visual Studio, choose IIS Express as the startup profile
+2. Press *Start (F5)*
+3. The browser will automatically open at:
 
 
 http://localhost:xxxx/
